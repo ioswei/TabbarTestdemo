@@ -120,17 +120,40 @@ static const float scale=0.55;
     self.tabBarHeight = 49.0;
      */
 }
+
 - (void)initTabBar{
  
+    //处理tabbar顶部黑线问题
+    [self clearBlackLineView];
     //创建VC
     [self createControllerBycontrollerArrayay:self.controllerArray];
     //创建tabBarView
     [self createTabBarView];
     //设置TabbarLine
     [self setTabBarShadowView];
+    
 }
 
--(void)createControllerBycontrollerArrayay:(NSArray *)controllerArrayay
+- (void)clearBlackLineView{
+    
+    if (@available(iOS 13.0, *)) {
+        UITabBarAppearance * appearnce = [UITabBarAppearance new];
+        [appearnce configureWithTransparentBackground];
+        appearnce.backgroundColor = [UIColor clearColor];
+        appearnce.shadowImage = [UIImage new];
+        self.tabBar.standardAppearance = appearnce;
+        if (@available(iOS 15.0, *)) {
+            self.tabBar.scrollEdgeAppearance = appearnce;
+        }
+    } else {
+        self.tabBar.shadowImage = [UIImage new];
+        self.tabBar.backgroundImage = [UIImage new];
+    }
+    
+}
+
+
+- (void)createControllerBycontrollerArrayay:(NSArray *)controllerArrayay
 {
     if(controllerArrayay.count==0) NSLog(@"控制器数组为nil,请初始化");
     NSMutableArray *tabBarArr = [[NSMutableArray alloc]init];
